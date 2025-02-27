@@ -1,0 +1,449 @@
+<html lang="en"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #f7fafc;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color:  #1258cb;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header .title {
+            display: flex;
+            align-items: center;
+        }
+        .header .title i {
+            margin-right: 0.5rem;
+        }
+        .header .title span {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .header button {
+            background-color: #3182ce;
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+        .header button:hover {
+            background-color: #2b6cb0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2.5rem;
+        }
+        .card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 40rem;
+        }
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .card ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        .card ol li {
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+        .card ul {
+            margin-left: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .card ul li {
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+        .card ul li i {
+            margin-right: 0.25rem;
+        }
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .floating-label {
+            position: relative;
+            flex: 1;
+        }
+        .floating-label input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid #cbd5e0;
+            border-radius: 0.25rem;
+            outline: none;
+        }
+        .floating-label input:focus + label,
+        .floating-label input:not(:placeholder-shown) + label {
+            top: -7px;
+            left: 10px;
+            font-size: 15px;
+            color: #4a5568;
+            border-color: #3b82f6;
+          
+            background-color: #f7fafc;
+        }
+        .floating-label label {
+            position: absolute;
+            top:15px;
+            left: 10px;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            font-size: 1rem;
+            color: #a0aec0;
+            
+        }
+        .custom-select {
+            border: none;
+            border-bottom: 1px solid #cbd5e0;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            color: #4a5568;
+            background-color: transparent;
+            appearance: none;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+        .checkbox-group input {
+            margin-right: 0.5rem;
+        }
+        .checkbox-group label {
+            margin-right: 1rem;
+            font-weight: bold;
+            color: #4a5568;
+        }
+        .password-field {
+            display: none;
+            margin-bottom: 1rem;
+        }
+        .password-field label {
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+        .password-field input {
+            width: 100%;
+            /* padding: 0.5rem 0.75rem; */
+            border: 1px solid #cbd5e0;
+            border-radius: 0.25rem;
+            outline: none;
+        }
+        /* .shorten-button {
+            background-color: #4299e1;
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            width: 100%;
+        } */
+        .shorten-button {
+    background-color: #4299e1;
+    color: white;
+    font-weight: bold;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 20px;
+    /* width: 100%; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+        .shorten-button:hover {
+            background-color: #2b6cb0;
+        }
+
+        .result {
+            display: none;
+            background-color: #fff1f2;
+            padding: 16px;
+            border-radius: 8px;
+        }
+        .result p {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .result a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .result .copy-icon {
+            color: #3b82f6;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+        ul.logo-text {
+            list-style: none;
+            }
+        ul .logo-text i{
+            background-color: green;
+        }
+
+
+        /* feature */
+      
+        .containers {
+            background-color: #f7fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .feature {
+            width: 10%;
+            min-width: 200px;
+        }
+        .feature i {
+            font-size: 2rem;
+            color: #4299e1;
+        }
+        .feature h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        .feature p {
+            color: #718096;
+        }
+
+        .footer {
+            background-color: #4299e1;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .footer .title {
+            display: flex;
+            align-items: center;
+        }
+        .footer .title a {
+            margin-right: 10px;
+            text-decoration: none;
+            gap: 20px;
+            display: flex;
+            justify-content: center;
+            color: #f7fafc  ;
+        }
+        .footer button:hover {
+            background-color: #2b6cb0;
+        }
+
+        /* media query */
+
+        @media only screen and (max-width: 600px) {
+         .checkbox-group{
+             gap: 10px;
+                }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            } 
+         .containers{
+            margin-top: 20px;
+         }   
+
+         .shorten-button{
+            width: 100%;
+         }
+         .footer .title a {
+            font-size: 14px;
+         }
+            }
+         @media only screen and (max-width:420px){
+            .stepsforshort{
+                display: none;
+            }
+         }   
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">
+            <i class="fas fa-link"></i>
+            <span>ushort</span>
+        </div>
+        <a href="track.html"> <button>Track Clicks</button></a>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h2>Easily shorten long URLs and customize them with a unique code. Secure and manage your links with additional options.</h2>
+            <h3>How to Use the URL Shortener</h3>
+            <ol class="stepsforshort">
+                <li>Enter a long URL in the 'Original URL' field.</li>
+                <li>(Optional) Add a custom code to personalize the short link.</li>
+                <li>Choose from the following options:
+                    <ul class="logo-text">
+                        <li><i class="fas fa-check text-green-500"></i> Expire After One Use: The link will be invalid after one visit.</li>
+                        <li><i class="fas fa-lock text-yellow-500"></i> Protect with Password: Users must enter a password to access the link.</li>
+                        <li><i class="fas fa-hourglass-half text-blue-500"></i> Link Expiry: Set an expiration time (default is No Expiry).</li>
+                    </ul>
+                </li>
+                <li>Click SHORTEN to generate your short link.</li>
+                <li>Copy and share your new short link! <i class="fas fa-clipboard"></i></li>
+            </ol>
+            <div class="input-group">
+                <div class="floating-label">
+                    <input type="text" id="original-url" placeholder=" ">
+                    <label for="original-url">Original URL</label>
+                </div>
+                <div class="floating-label">
+                    <input type="text" id="custom-code" placeholder=" ">
+                    <label for="custom-code">Custom Code (Optional)</label>
+                </div>
+            </div>
+            <div class="checkbox-group">
+                <div class="check-a">
+                    <input type="checkbox" id="expire-once">
+                <label for="expire-once">Expire After One Use</label>
+                </div>
+                <div class="check-b">
+                    <input type="checkbox" id="protect-password" onclick="togglePasswordField()">
+                    <label for="protect-password">Protect with password</label>
+                </div>
+                
+                <label for="link-expiry">Link Expiry:</label>
+                <select id="link-expiry" class="custom-select">
+                    <option>No Expiry</option>
+                    <option>1 Hour</option>
+                    <option>1 Day</option>
+                    <option>1 Week</option>
+                </select>
+            </div>
+            <div id="password-field" class="password-field">
+                <!-- <label for="password">Password</label> -->
+                <div class="floating-label">
+                    <input type="password" id="password" placeholder=" ">
+                    <label for="password">Enter password</label>
+                </div>
+            </div>
+            <button class="shorten-button" onclick="showResult()">SHORTEN</button>
+            <div class="result" id="result">
+                <p>Your shortened URL:</p>
+                <div class="url-container">
+                    <a href="https://ushort.site/OGjTpK" id="shortened-url">https://www.sarkariresult.com/</a>
+                    <i class="fas fa-copy copy-icon" onclick="copyToClipboard()"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+       
+    <div class="containers">
+        <div class="feature">
+            <i class="fas fa-link"></i>
+            <h2>Shorten URLs</h2>
+            <p>Easily shorten long URLs into compact links.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-chart-bar"></i>
+            <h2>Click Tracking</h2>
+            <p>Track the number of times your link has been clicked.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-shield-alt"></i>
+            <h2>Secure</h2>
+            <p>Your links are safe with HTTPS and encryption.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-hourglass-end"></i>
+            <h2>Auto Expiry</h2>
+            <p>Unused links are deleted after one year.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-lock"></i>
+            <h2>Password Protected</h2>
+            <p>Protect your links with a password for extra security.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-stopwatch"></i>
+            <h2>One-Time Use</h2>
+            <p>Set links to expire after a single use.</p>
+        </div>
+    </div>
+
+
+        <div class="footer">
+            <div class="title">
+                <!-- <i class="fas fa-link"></i> -->
+                <a href="#">Privacy Policy</a>
+         
+                <a href="#">Terms of Use</a>
+                <a href="#">About Us</a>
+            </div>
+        </div>
+
+    <script>
+        function togglePasswordField() {
+            const passwordField = document.getElementById('password-field');
+            const protectPasswordCheckbox = document.getElementById('protect-password');
+            if (protectPasswordCheckbox.checked) {
+                passwordField.style.display = 'block';
+            } else {
+                passwordField.style.display = 'none';
+            }
+        }
+
+
+        function showResult() {
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function copyToClipboard() {
+            const url = document.getElementById('shortened-url').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('URL copied to clipboard');
+            });
+        }
+
+    </script>
+</body>
+</html>
